@@ -62,6 +62,11 @@ The type of component to wrap links in.
 _type:_ `any`  
 _default:_ `'a'`  
 
+**inlineImages**  
+Whether to detect images and append the last one to the bottom of the component.  
+_type:_ `bool`  
+_default:_ `false`  
+
 **properties**  
 The props that will be added to every matched component.  
 _type:_ `object`  

@@ -57,6 +57,11 @@ var Linkify = function (_React$Component) {
       return linkify.match(string);
     }
   }, {
+    key: 'isImage',
+    value: function isImage(url) {
+      return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+    }
+  }, {
     key: 'parseString',
     value: function parseString(string) {
       var _this2 = this;
@@ -72,6 +77,7 @@ var Linkify = function (_React$Component) {
       }
 
       var lastIndex = 0;
+      var image = void 0;
       matches.forEach(function (match, idx) {
         // Push the preceding text if there is any
         if (match.index > lastIndex) {
@@ -87,12 +93,20 @@ var Linkify = function (_React$Component) {
 
           props[key] = val;
         }
+        if (_this2.props.inlineImages && _this2.isImage(match.url)) {
+          image = _react2.default.createElement('img', { src: match.url });
+        }
         elements.push(_react2.default.createElement(_this2.props.component, props, match.text));
         lastIndex = match.lastIndex;
       });
 
       if (lastIndex < string.length) {
         elements.push(string.substring(lastIndex));
+      }
+
+      if (image) {
+        elements.push(_react2.default.createElement('br'));
+        elements.push(image);
       }
 
       return elements.length === 1 ? elements[0] : elements;
@@ -137,6 +151,7 @@ Linkify.MATCH = 'LINKIFY_MATCH';
 Linkify.propTypes = {
   className: _propTypes2.default.string,
   component: _propTypes2.default.any,
+  inlineImages: _propTypes2.default.bool,
   properties: _propTypes2.default.object,
   urlRegex: _propTypes2.default.object,
   emailRegex: _propTypes2.default.object
@@ -144,6 +159,7 @@ Linkify.propTypes = {
 Linkify.defaultProps = {
   className: 'Linkify',
   component: 'a',
+  inlineImages: false,
   properties: {}
 };
 exports.default = Linkify;

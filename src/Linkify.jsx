@@ -12,6 +12,7 @@ class Linkify extends React.Component {
   static propTypes = {
     className: PropTypes.string,
     component: PropTypes.any,
+    inlineImages: PropTypes.bool,
     properties: PropTypes.object,
     urlRegex: PropTypes.object,
     emailRegex: PropTypes.object
@@ -20,6 +21,7 @@ class Linkify extends React.Component {
   static defaultProps = {
     className: 'Linkify',
     component: 'a',
+    inlineImages: false,
     properties: {},
   }
 
@@ -27,6 +29,10 @@ class Linkify extends React.Component {
 
   getMatches(string) {
     return linkify.match(string);
+  }
+
+  isImage(url) {
+    return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
   }
 
   parseString(string) {
@@ -41,6 +47,7 @@ class Linkify extends React.Component {
     }
 
     let lastIndex = 0;
+    let image;
     matches.forEach((match, idx) => {
       // Push the preceding text if there is any
       if (match.index > lastIndex) {
@@ -56,6 +63,12 @@ class Linkify extends React.Component {
 
         props[key] = val;
       }
+      if (this.props.inlineImages && this.isImage(match.url)) {
+        image = React.createElement(
+          'img',
+          {src: match.url}
+        )
+      }
       elements.push(React.createElement(
         this.props.component,
         props,
@@ -66,6 +79,11 @@ class Linkify extends React.Component {
 
     if (lastIndex < string.length) {
       elements.push(string.substring(lastIndex));
+    }
+
+    if (image) {
+      elements.push(React.createElement('br'));
+      elements.push(image);
     }
 
     return (elements.length === 1) ? elements[0] : elements;
