@@ -37,6 +37,11 @@ React component to parse links (urls, emails, etc.) in text into clickable links
 See examples at `tasti.github.io/react-linkify/`.  
 Contact: `tasti@zakarie.com`
 
+## Changes in tt-react-linkify fork
+
+* Add support for inlined images
+
+Original project: https://github.com/tasti/react-linkify
 
 ## Installation
 
